@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Voice Notes 💌</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --rose:      #e8486a;
+      --blush:     #f9c4d2;
+      --petal:     #fde8ef;
+      --cream:     #fff7f9;
+      --mauve:     #c4526e;
+      --text:      #4a1528;
+      --muted:     #9e6070;
+      --card-bg:   rgba(255,255,255,0.72);
+      --shadow:    0 8px 40px rgba(228,72,106,0.13);
+    }
+
+    html, body {
+      min-height: 100vh;
+      background: var(--cream);
+      font-family: 'Lora', serif;
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── Background petals ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 10%, rgba(249,196,210,0.55) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 80% 90%, rgba(232,72,106,0.12) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 40% at 55% 50%, rgba(253,232,239,0.7) 0%, transparent 80%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .floating-heart {
+      position: fixed;
+      font-size: 1.2rem;
+      opacity: 0;
+      animation: floatUp linear infinite;
+      pointer-events: none;
+      z-index: 0;
+      user-select: none;
+    }
+
+    @keyframes floatUp {
+      0%   { transform: translateY(105vh) scale(0.7) rotate(-10deg); opacity: 0; }
+      10%  { opacity: 0.35; }
+      90%  { opacity: 0.2; }
+      100% { transform: translateY(-10vh) scale(1.1) rotate(10deg); opacity: 0; }
+    }
+
+    /* ── Page wrapper ── */
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 56px 20px 80px;
+    }
+
+    /* ── Header ── */
+    .header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .header-icon {
+      font-size: 2.8rem;
+      display: block;
+      margin-bottom: 12px;
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50%       { transform: scale(1.12); }
+    }
+
+    .header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.9rem, 6vw, 2.6rem);
+      font-style: italic;
+      color: var(--rose);
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+    }
+
+    .header p {
+      margin-top: 10px;
+      font-size: 0.92rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 18px auto 0;
+      max-width: 220px;
+    }
+    .divider-line { flex: 1; height: 1px; background: var(--blush); }
+    .divider-heart { color: var(--rose); font-size: 0.8rem; }
+
+    /* ── Cards ── */
+    .cards {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1.5px solid rgba(232,72,106,0.18);
+      border-radius: 20px;
+      padding: 22px 24px;
+      box-shadow: var(--shadow);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      animation: slideIn 0.5s ease both;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 50px rgba(228,72,106,0.2);
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .card:nth-child(1) { animation-delay: 0.05s; }
+    .card:nth-child(2) { animation-delay: 0.12s; }
+    .card:nth-child(3) { animation-delay: 0.19s; }
+    .card:nth-child(4) { animation-delay: 0.26s; }
+    .card:nth-child(5) { animation-delay: 0.33s; }
+    .card:nth-child(6) { animation-delay: 0.40s; }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .card-num {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--rose), var(--mauve));
+      color: #fff;
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(196,82,110,0.35);
+    }
+
+    .card-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.08rem;
+      font-style: italic;
+      color: var(--text);
+      flex: 1;
+    }
+
+    .card-status {
+      font-size: 0.72rem;
+      color: var(--muted);
+      background: var(--petal);
+      border-radius: 20px;
+      padding: 3px 10px;
+      border: 1px solid var(--blush);
+    }
+
+    /* ── Custom player ── */
+    .player {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .play-btn {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      border: none;
+      background: linear-gradient(135deg, var(--rose), #f06080);
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 4px 14px rgba(232,72,106,0.4);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .play-btn:hover { transform: scale(1.08); box-shadow: 0 6px 20px rgba(232,72,106,0.5); }
+    .play-btn:active { transform: scale(0.96); }
+
+    .play-btn svg { display: block; }
+
+    .progress-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .progress-bar-wrap {
+      width: 100%;
+      height: 6px;
+      background: var(--blush);
+      border-radius: 99px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--rose), #f06080);
+      border-radius: 99px;
+      transition: width 0.1s linear;
+      pointer-events: none;
+    }
+
+    .time-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-family: monospace;
+    }
+
+    /* ── No right-click / download protection ── */
+
+  </style>
+</head>
+<body>
+
+<!-- Floating hearts background -->
+<script>
+  const emojis = ['🌸','💕','🌷','💗','✨','🫶','💝'];
+  for (let i = 0; i < 14; i++) {
+    const el = document.createElement('div');
+    el.className = 'floating-heart';
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.animationDuration = (12 + Math.random() * 14) + 's';
+    el.style.animationDelay = (Math.random() * 18) + 's';
+    el.style.fontSize = (0.8 + Math.random() * 1.1) + 'rem';
+    document.body.appendChild(el);
+  }
+</script>
+
+<div class="page">
+
+  <header class="header">
+    <span class="header-icon">💌</span>
+    <h1>Just for you…</h1>
+    <p>Six little things I wanted you to hear</p>
+    <div class="divider">
+      <div class="divider-line"></div>
+      <span class="divider-heart">♥</span>
+      <div class="divider-line"></div>
+    </div>
+  </header>
+
+  <div class="cards" id="cards"></div>
+
+</div>
+
+<script>
+  // ── Config ──────────────────────────────────────────────
+  const notes = [
+    { file: 'voice1.mp3', label: 'Voice Note I' },
+    { file: 'voice2.mp3', label: 'Voice Note II' },
+    { file: 'voice3.mp3', label: 'Voice Note III' },
+    { file: 'voice4.mp3', label: 'Voice Note IV' },
+    { file: 'voice5.mp3', label: 'Voice Note V' },
+    { file: 'voice6.mp3', label: 'Voice Note VI' },
+  ];
+
+  const romans = ['I','II','III','IV','V','VI'];
+
+  // ── Disable right-click, drag, keyboard shortcuts ───────
+  document.addEventListener('contextmenu', e => e.preventDefault());
+  document.addEventListener('dragstart',   e => e.preventDefault());
+  document.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && ['s','u','a'].includes(e.key.toLowerCase())) e.preventDefault();
+  });
+
+  // ── Build cards ──────────────────────────────────────────
+  const container = document.getElementById('cards');
+  const audios = [];
+
+  notes.forEach((note, i) => {
+    const audio = new Audio();
+    // Prevent native download: no src until play, loaded via blob-style fetch
+    audio.preload = 'none';
+    audios.push(audio);
+
+    // Card HTML
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="card-top">
+        <div class="card-num">${romans[i]}</div>
+        <div class="card-label">${note.label}</div>
+        <span class="card-status" id="status-${i}">♪ tap to play</span>
+      </div>
+      <div class="player">
+        <button class="play-btn" id="btn-${i}" aria-label="Play ${note.label}">
+          ${playIcon()}
+        </button>
+        <div class="progress-area">
+          <div class="progress-bar-wrap" id="bar-${i}">
+            <div class="progress-fill" id="fill-${i}"></div>
+          </div>
+          <div class="time-row">
+            <span id="cur-${i}">0:00</span>
+            <span id="dur-${i}">--:--</span>
+          </div>
+        </div>
+      </div>
+    `;
+    container.appendChild(card);
+
+    // Fetch audio as blob so URL is opaque (no direct file link exposed)
+    let blobUrl = null;
+    let loaded = false;
+
+    async function loadAudio() {
+      if (loaded) return;
+      try {
+        const resp = await fetch(note.file);
+        if (!resp.ok) throw new Error('not found');
+        const blob = await resp.blob();
+        blobUrl = URL.createObjectURL(blob);
+        audio.src = blobUrl;
+        loaded = true;
+      } catch {
+        document.getElementById(`status-${i}`).textContent = '⚠ not found';
+      }
+    }
+
+    const btn  = document.getElementById(`btn-${i}`);
+    const fill = document.getElementById(`fill-${i}`);
+    const bar  = document.getElementById(`bar-${i}`);
+    const cur  = document.getElementById(`cur-${i}`);
+    const dur  = document.getElementById(`dur-${i}`);
+    const stat = document.getElementById(`status-${i}`);
+
+    btn.addEventListener('click', async () => {
+      await loadAudio();
+      if (!loaded) return;
+
+      // Pause all others
+      audios.forEach((a, j) => {
+        if (j !== i && !a.paused) {
+          a.pause();
+          document.getElementById(`btn-${j}`).innerHTML = playIcon();
+          document.getElementById(`status-${j}`).textContent = '♪ paused';
+        }
+      });
+
+      if (audio.paused) {
+        audio.play();
+        btn.innerHTML = pauseIcon();
+        stat.textContent = '♪ playing…';
+      } else {
+        audio.pause();
+        btn.innerHTML = playIcon();
+        stat.textContent = '♪ paused';
+      }
+    });
+
+    // Seek on bar click
+    bar.addEventListener('click', e => {
+      if (!audio.duration) return;
+      const rect = bar.getBoundingClientRect();
+      const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      audio.currentTime = pct * audio.duration;
+    });
+
+    audio.addEventListener('timeupdate', () => {
+      if (!audio.duration) return;
+      const pct = (audio.currentTime / audio.duration) * 100;
+      fill.style.width = pct + '%';
+      cur.textContent = fmt(audio.currentTime);
+    });
+
+    audio.addEventListener('loadedmetadata', () => {
+      dur.textContent = fmt(audio.duration);
+    });
+
+    audio.addEventListener('ended', () => {
+      btn.innerHTML = playIcon();
+      fill.style.width = '0%';
+      cur.textContent = '0:00';
+      stat.textContent = '♪ tap to play';
+    });
+  });
+
+  function fmt(s) {
+    if (!s || isNaN(s)) return '0:00';
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60).toString().padStart(2, '0');
+    return `${m}:${sec}`;
+  }
+
+  function playIcon() {
+    return `<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <polygon points="4,2 14,8 4,14" fill="white"/>
+    </svg>`;
+  }
+
+  function pauseIcon() {
+    return `<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <rect x="3" y="2" width="4" height="12" rx="1" fill="white"/>
+      <rect x="9" y="2" width="4" height="12" rx="1" fill="white"/>
+    </svg>`;
+  }
+</script>
+</body>
+</html>
