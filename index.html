@@ -145,6 +145,7 @@
     .card:nth-child(4) { animation-delay: 0.26s; }
     .card:nth-child(5) { animation-delay: 0.33s; }
     .card:nth-child(6) { animation-delay: 0.40s; }
+    .card:nth-child(7) { animation-delay: 0.47s; }
 
     .card-top {
       display: flex;
@@ -269,7 +270,6 @@
   <header class="header">
     <span class="header-icon">💌</span>
     <h1>Just for you…</h1>
-    <p>Six little things I wanted you to hear</p>
     <div class="divider">
       <div class="divider-line"></div>
       <span class="divider-heart">♥</span>
@@ -284,15 +284,16 @@
 <script>
   // ── Config ──────────────────────────────────────────────
   const notes = [
-    { file: 'voice1.mp3', label: 'Voice Note I' },
-    { file: 'voice2.mp3', label: 'Voice Note II' },
-    { file: 'voice3.mp3', label: 'Voice Note III' },
-    { file: 'voice4.mp3', label: 'Voice Note IV' },
-    { file: 'voice5.mp3', label: 'Voice Note V' },
-    { file: 'voice6.mp3', label: 'Voice Note VI' },
+    { file: 'voice2.m4a', label: 'Voice Note I' },
+    { file: 'voice3.m4a', label: 'Voice Note II' },
+    { file: 'voice4.m4a', label: 'Voice Note III' },
+    { file: 'voice5.m4a', label: 'Voice Note IV' },
+    { file: 'voice6.m4a', label: 'Voice Note V' },
+    { file: 'voice7.m4a', label: 'Voice Note VI' },
+    { file: 'voice8.m4a', label: 'Voice Note VII' },
   ];
 
-  const romans = ['I','II','III','IV','V','VI'];
+  const romans = ['I','II','III','IV','V','VI','VII'];
 
   // ── Disable right-click, drag, keyboard shortcuts ───────
   document.addEventListener('contextmenu', e => e.preventDefault());
